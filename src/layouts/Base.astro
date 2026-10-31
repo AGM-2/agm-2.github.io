@@ -35,8 +35,11 @@ const nav = [
     <meta property="og:description" content={description} />
     <meta property="og:url" content={new URL(path, Astro.site)} />
     <meta property="og:image" content={new URL(`${base}logo.png`, Astro.site)} />
+    <!-- The .ico and .png are renders of favicon.svg (scripts/icons.py) for
+         Safari, which ignores SVG favicons, and for phones' home screens. -->
+    <link rel="icon" href={`${base}favicon.ico`} sizes="32x32" />
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
-    <link rel="apple-touch-icon" href={`${base}logo.png`} />
+    <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
   </head>
   <body>
     <div class="page">

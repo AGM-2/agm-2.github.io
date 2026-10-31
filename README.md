@@ -27,6 +27,7 @@ npm run astro -- check   # type-check .astro and .ts files
 | Events | `src/data/events.json` |
 | Digest issues | written by the mailing list, see below; don't edit by hand |
 | Colours and layout | `src/styles/global.css` (light, and dark under `prefers-color-scheme`) |
+| Favicon | `public/favicon.svg`, then `python3 scripts/icons.py` to re-render the `.ico`/`.png` copies |
 
 ### Events
 
