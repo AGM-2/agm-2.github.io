@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { Content as About } from '../about.md';
+import site from '../data/site.json';
+import { base, dateRange, href, isUpcoming, subscribeHref } from '../lib/site';
+
+const latest = (await getCollection('digest')).sort((a, b) => b.data.month.localeCompare(a.data.month))[0];
+const upcoming = (await getCollection('events'))
+  .filter((e) => isUpcoming(e.data))
+  .sort((a, b) => a.data.start.localeCompare(b.data.start))
+  .slice(0, 3);
+---
+
+<Base>
+  <h1>About</h1>
+  <About />
+  <p>
+    The {site.digest} arrives once a month by email: <a href={subscribeHref}>subscribe</a> to
+    receive it.
+  </p>
+
+  <section class="box">
+    <h2>The {site.digest}</h2>
+    <p>
+      Papers, code, talks, events and job openings, each with a line or two on why it is worth a
+      look.
+    </p>
+    {
+      latest ? (
+        <p>
+          Latest:{' '}
+          <a href={`${base}digest/${latest.id}/`}>
+            #{latest.data.number} · {latest.data.month_name}
+          </a>
+          <br />
+          <span class="meta">{latest.data.sections.map((s) => s.title).join(' · ')}</span>
+        </p>
+      ) : (
+        <p class="muted">The first issue is on its way.</p>
+      )
+    }
+    <ul class="inline">
+      <li><a href={subscribeHref}>Subscribe</a></li>
+      {latest && <li><a href={`${base}digest/`}>All issues</a></li>}
+    </ul>
+  </section>
+
+  <section class="box">
+    <h2>Upcoming events</h2>
+    {
+      upcoming.length > 0 ? (
+        <ul class="event-lines">
+          {upcoming.map((e) => (
+            <li>
+              <a href={e.data.url ? href(e.data.url) : `${base}events/#${e.id}`}>{e.data.title}</a>
+              <br />
+              <span class="meta">
+                {[e.data.kind, e.data.city, dateRange(e.data.start, e.data.end)].filter(Boolean).join(' · ')}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="muted">Nothing scheduled at the moment.</p>
+      )
+    }
+    <ul class="inline">
+      <li><a href={`${base}events/`}>All events</a></li>
+    </ul>
+  </section>
+</Base>

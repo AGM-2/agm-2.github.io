@@ -1,0 +1,50 @@
+---
+// One digest issue, laid out like the email (mail_list/template/email.html.j2):
+// the intro, "In this issue", then one box per section.
+import type { CollectionEntry } from 'astro:content';
+import { base, slugify } from '../lib/site';
+
+interface Props {
+  issue: CollectionEntry<'digest'>['data'];
+}
+const { issue } = Astro.props;
+
+// Relative image paths in the issue point to its files, public/digest/<YYYY-MM>/.
+const files = `${base}digest/${issue.month}/`;
+const localise = (html: string) =>
+  html.replace(/(<img\b[^>]*\bsrc=")(?![a-z][a-z0-9+.-]*:|\/)/gi, `$1${files}`);
+const sections = issue.sections.map((s) => ({ ...s, id: slugify(s.title), html: localise(s.html) }));
+---
+
+{issue.intro && <div class="intro" set:html={localise(issue.intro)} />}
+
+{
+  sections.length > 0 && (
+    <nav class="toc" aria-labelledby="in-this-issue">
+      <h2 id="in-this-issue">In this issue</h2>
+      {sections.map((s) => (
+        <>
+          <p class="toc-section">
+            <a href={`#${s.id}`}>{s.title}</a>
+          </p>
+          {s.contents.length > 0 && (
+            <ul>
+              {s.contents.map((line) => (
+                <li>{line.url ? <a href={line.url}>{line.label}</a> : line.label}</li>
+              ))}
+            </ul>
+          )}
+        </>
+      ))}
+    </nav>
+  )
+}
+
+{
+  sections.map((s) => (
+    <section class="box" id={s.id}>
+      <h2>{s.title}</h2>
+      <Fragment set:html={s.html} />
+    </section>
+  ))
+}

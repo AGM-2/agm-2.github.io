@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import EventItem from '../../components/EventItem.astro';
+import { isUpcoming } from '../../lib/site';
+
+const events = await getCollection('events');
+const upcoming = events.filter((e) => isUpcoming(e.data)).sort((a, b) => a.data.start.localeCompare(b.data.start));
+const past = events.filter((e) => !isUpcoming(e.data)).sort((a, b) => b.data.start.localeCompare(a.data.start));
+---
+
+<Base
+  title="Events"
+  description="Conferences, workshops, minisymposia and seminars on analytical and geometric methods for microstructure, with slides and recordings."
+>
+  <h1>Events</h1>
+  <p>
+    Conferences, workshops, minisymposia and seminars on the topics of AGM². Slides, notes and
+    recordings are linked under an event when there are some.
+  </p>
+
+  <h2>Upcoming</h2>
+  {
+    upcoming.length > 0 ? (
+      upcoming.map((event) => <EventItem event={event} />)
+    ) : (
+      <p class="muted">Nothing scheduled at the moment.</p>
+    )
+  }
+
+  {
+    past.length > 0 && (
+      <>
+        <h2>Past</h2>
+        {past.map((event) => (
+          <EventItem event={event} />
+        ))}
+      </>
+    )
+  }
+</Base>

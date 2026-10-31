@@ -1,0 +1,75 @@
+---
+// The HTML shell of every page: head, the masthead with the navigation, footer.
+import '../styles/global.css';
+import site from '../data/site.json';
+import { base, subscribeHref } from '../lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title,
+  description = `${site.name} (${site.title}) is a notice board for people who work on microstructured materials: news, papers, events and job openings, and the monthly ${site.digest}.`,
+} = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name}: ${site.title}`;
+const path = Astro.url.pathname;
+const nav = [
+  { href: base, label: 'About', current: path === base },
+  { href: `${base}digest/`, label: 'Digest', current: path.startsWith(`${base}digest/`) },
+  { href: `${base}events/`, label: 'Events', current: path.startsWith(`${base}events/`) },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(path, Astro.site)} />
+    <meta property="og:image" content={new URL(`${base}logo.png`, Astro.site)} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={`${base}logo.png`} />
+  </head>
+  <body>
+    <div class="page">
+      <header class="masthead">
+        <a href={base} aria-label={`${site.name} home`}>
+          <img class="logo" src={`${base}logo.svg`} width="72" height="72" alt="" />
+        </a>
+        <div>
+          <p class="site-name"><a href={base}>{site.name}</a></p>
+          <p class="tagline">{site.title}</p>
+          <nav aria-label="Main">
+            <ul class="inline">
+              {nav.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.label}</a>
+                </li>
+              ))}
+              <li><a href={subscribeHref}>Subscribe</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <p>{site.name} · {site.title}</p>
+        <p>
+          <a href={`mailto:${site.contact}`}>{site.contact}</a> · <a href={site.github}>GitHub</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

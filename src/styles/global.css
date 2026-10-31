@@ -1,0 +1,251 @@
+/* The look of the AGM² Digest email (mail_list/template/style.css): monospace,
+ * white page, boxes with a thin black border, blue links without underline.
+ * Colours are tokens, so the dark variant only redefines them. */
+
+:root {
+  --ink: #26445e;
+  --muted: #6b7f90;
+  --link: #4478a6;
+  --page: #ffffff;
+  --box: #000000;
+  --rule: #d3d3d3;
+  --code: #e4e4e4;
+  --mono: ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #d3e0eb;
+    --muted: #8ea2b4;
+    --link: #86b5df;
+    --page: #0e1922;
+    --box: #b9cad8;
+    --rule: #2f4253;
+    --code: #24384a;
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.page {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: bold;
+  line-height: 1.3;
+}
+
+h1 {
+  margin: 24px 0 12px 0;
+  font-size: 20px;
+}
+
+h2 {
+  margin: 14px 0 8px 0;
+  font-size: 16px;
+}
+
+h3 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+}
+
+p {
+  margin: 0 0 12px 0;
+}
+
+ul,
+ol {
+  margin: 0 0 12px 0;
+  padding-left: 20px;
+}
+
+li {
+  margin: 0 0 8px 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border: 0;
+}
+
+code {
+  background: var(--code);
+  padding: 0 2px;
+}
+
+/* Header: logo, name and tagline as in the email, plus the navigation. */
+.masthead {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 0 8px 0;
+}
+
+.masthead > a {
+  flex: none;
+}
+
+.logo {
+  display: block;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+}
+
+.site-name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.site-name a {
+  color: inherit;
+}
+
+.tagline {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+}
+
+.masthead .inline {
+  margin: 6px 0 0 0;
+  font-size: 13px;
+}
+
+.masthead a[aria-current='page'] {
+  color: var(--ink);
+  font-weight: bold;
+}
+
+/* A one-line list of links separated by middle dots. */
+.inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 0.6em;
+  padding: 0;
+  list-style: none;
+}
+
+.inline li {
+  margin: 0;
+}
+
+.inline li:not(:last-child)::after {
+  content: '·';
+  margin-left: 0.6em;
+  color: var(--muted);
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.box {
+  margin: 16px 0;
+  padding: 0 16px 4px 16px;
+  border: 1px solid var(--box);
+}
+
+.box > :first-child {
+  margin-top: 14px;
+}
+
+/* "In this issue", as in the email. */
+.toc {
+  margin: 24px 0 8px 0;
+}
+
+.toc-section {
+  margin: 8px 0 2px 0;
+  font-weight: bold;
+}
+
+.toc-section a {
+  color: inherit;
+}
+
+.toc ul {
+  margin: 0 0 4px 0;
+}
+
+.toc li {
+  margin: 0 0 2px 0;
+}
+
+/* Compact event lines on the home page. */
+.event-lines {
+  padding: 0;
+  list-style: none;
+}
+
+.event-lines li {
+  margin: 0 0 10px 0;
+}
+
+.site-footer {
+  margin-top: 32px;
+  padding: 12px 0 24px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.site-footer p {
+  margin: 0 0 6px 0;
+}
+
+@media (max-width: 480px) {
+  .masthead {
+    gap: 12px;
+  }
+  .logo {
+    width: 56px;
+    height: 56px;
+  }
+}

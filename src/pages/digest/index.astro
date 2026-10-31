@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import site from '../../data/site.json';
+import { base, subscribeHref } from '../../lib/site';
+
+const issues = (await getCollection('digest')).sort((a, b) => b.data.month.localeCompare(a.data.month));
+---
+
+<Base
+  title="Digest"
+  description={`Every issue of the ${site.digest}, a monthly email of papers, code, talks, events and job openings on ${site.title.toLowerCase()}.`}
+>
+  <h1>The {site.digest}</h1>
+  <p>
+    A monthly email with papers, code and tools, talks, events and job openings, each with a line
+    or two on why it is worth a look. Every issue sent so far is here, also as a PDF.
+  </p>
+  <p>
+    To receive it, <a href={subscribeHref}>send an email</a> asking to be added. Every issue has a
+    link to unsubscribe.
+  </p>
+
+  {
+    issues.length > 0 ? (
+      issues.map((issue) => (
+        <article class="box">
+          <h2>
+            <a href={`${base}digest/${issue.id}/`}>
+              #{issue.data.number} · {issue.data.month_name}
+            </a>
+          </h2>
+          {issue.data.preheader && <p>{issue.data.preheader}</p>}
+          <p class="meta">{issue.data.sections.map((s) => s.title).join(' · ')}</p>
+          <ul class="inline">
+            <li>
+              <a href={`${base}digest/${issue.id}/`}>Read</a>
+            </li>
+            <li>
+              <a href={`${base}digest/${issue.id}/${issue.data.pdf}`}>PDF</a>
+            </li>
+          </ul>
+        </article>
+      ))
+    ) : (
+      <p class="muted">No issues yet: the first one is on its way.</p>
+    )
+  }
+</Base>

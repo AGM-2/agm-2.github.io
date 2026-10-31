@@ -1,0 +1,39 @@
+---
+// One event from src/data/events.json, in a box: title, then kind, place and
+// dates, summary, then its links (slides, recordings, ...) and a calendar file
+// if it is upcoming and its days are known.
+import type { CollectionEntry } from 'astro:content';
+import { base, dateRange, hasExactDays, href, isUpcoming } from '../lib/site';
+
+interface Props {
+  event: CollectionEntry<'events'>;
+}
+const { event } = Astro.props;
+const e = event.data;
+const calendar = isUpcoming(e) && hasExactDays(e);
+const place = [e.venue, e.city].filter(Boolean).join(', ');
+---
+
+<article class="box" id={event.id}>
+  <h3>{e.url ? <a href={href(e.url)}>{e.title}</a> : e.title}</h3>
+  <p class="meta">{[e.kind, place, dateRange(e.start, e.end)].filter(Boolean).join(' · ')}</p>
+  {e.summary && <p>{e.summary}</p>}
+  {
+    (e.links.length > 0 || calendar) && (
+      <ul class="inline">
+        {e.links.map((link) => (
+          <li>
+            <a href={href(link.url)}>{link.label}</a>
+          </li>
+        ))}
+        {calendar && (
+          <li>
+            <a href={`${base}events/${event.id}.ics`} download={`${event.id}.ics`}>
+              Add to calendar
+            </a>
+          </li>
+        )}
+      </ul>
+    )
+  }
+</article>

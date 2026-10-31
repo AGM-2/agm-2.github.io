@@ -1,0 +1,42 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import IssueBody from '../../components/IssueBody.astro';
+import site from '../../data/site.json';
+import { base, subscribeHref } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const issues = (await getCollection('digest')).sort((a, b) => a.data.month.localeCompare(b.data.month));
+  return issues.map((issue, i) => ({
+    params: { month: issue.id },
+    props: { issue, previous: issues[i - 1], next: issues[i + 1] },
+  }));
+}
+
+interface Props {
+  issue: CollectionEntry<'digest'>;
+  previous?: CollectionEntry<'digest'>;
+  next?: CollectionEntry<'digest'>;
+}
+const { issue, previous, next } = Astro.props;
+const { number, month_name, preheader, pdf } = issue.data;
+const link = (entry: CollectionEntry<'digest'>) => `${base}digest/${entry.id}/`;
+---
+
+<Base
+  title={`${site.digest} #${number}`}
+  description={preheader || `Issue #${number} of the ${site.digest}, ${month_name}.`}
+>
+  <p class="meta"><a href={`${base}digest/`}>Digest</a> / #{number}</p>
+  <h1>{site.digest} #{number} · {month_name}</h1>
+
+  <IssueBody issue={issue.data} />
+
+  <ul class="inline">
+    <li><a href={`${base}digest/${issue.id}/${pdf}`}>PDF</a></li>
+    {previous && <li><a href={link(previous)}>← #{previous.data.number}</a></li>}
+    {next && <li><a href={link(next)}>#{next.data.number} →</a></li>}
+    <li><a href={`${base}digest/`}>All issues</a></li>
+    <li><a href={subscribeHref}>Subscribe</a></li>
+  </ul>
+</Base>

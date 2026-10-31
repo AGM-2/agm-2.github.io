@@ -1,0 +1,7 @@
+<!-- The AGM² favicon: the logo's +1/2 defect cut down to a 3 x 3 grid of
+     director lines (angle phi/2 at polar angle phi), so it still reads at 16 px.
+     logo.svg stays the full logo. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+<rect width="32" height="32" rx="7" fill="#26445e"/>
+<path d="M5.62 10.33L8.38 3.67M7.00 19.60L7.00 12.40M5.62 21.67L8.38 28.33M13.45 9.55L18.55 4.45M12.40 16.00L19.60 16.00M13.45 22.45L18.55 27.55M21.67 8.38L28.33 5.62M21.40 16.00L28.60 16.00M21.67 23.62L28.33 26.38" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+</svg>
