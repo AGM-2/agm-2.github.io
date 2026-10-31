@@ -12,6 +12,8 @@ topics include:
 
 - **ordered fluids**: nematic and smectic liquid crystals, Q-tensors and their
   defects, ferrofluids, active matter, kinetic and continuum models;
+- **plasmas**: magnetohydrodynamics, kinetic models, anisotropic transport in
+  magnetised plasmas, dusty plasmas and plasma crystals;
 - **ice and geophysics**: crystal fabric of ice, anisotropic flow of glaciers
   and ice sheets;
 - **solids and elasticity**: liquid crystal elastomers and networks, origami,
